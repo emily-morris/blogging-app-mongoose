@@ -42,19 +42,18 @@ function generatePostContent() {
 
 // generate data to put in db
 function generatePostAuthor() {
-	const author = [{ firstName: "John", lastName: "Smith" }];
+	const author = { firstName: "John", lastName: "Smith" };
 	return author;
 }
 
 // generate object representing a post
-
 function generatePostData() {
 	return {
 		title: generatePostTitle(),
 		content: generatePostContent(),
 		author: generatePostAuthor()
 	};
-
+}
 
 // delete entire db so data clears from test to test
 function tearDownDb() {
@@ -90,6 +89,7 @@ describe("Posts API resource", function() {
 	// `describe` blocks allow us to make clearer tests
 	// that focus on proving something small
 	describe("GET endpoint", function() {
+
 		it("should return all existing posts", function() {
 			// get back all posts returned by GET requests to `posts`
 			// prove response has right status and data type
@@ -108,6 +108,32 @@ describe("Posts API resource", function() {
 				.then(function(count) {
 					expect(res.body.posts).to.have.lengthOf(count);
 				});
+		});
+
+		it("should return posts with right fields", function() {
+			// get back all posts and ensure they have expected keys
+
+			let resPost;
+			return chai.request(app)
+			.get("/posts")
+			.then(function(res) {
+				expect(res).to.have.status(200);
+				expect(res).to.be.json;
+				expect(res.body.posts).to.be.a("array");
+				expect(res.body.posts).to.have.lengthOf.at.least(1);
+
+				res.body.posts.forEach(function(post) {
+					expect(post).to.be.a("object");
+					expect(post).to.include.keys("title", "content", "author");
+				});
+				resPost = res.body.posts[0];
+				return resPost;
+			})
+			.then(function(post) {
+				expect(resPost.title).to.equal(post.title);
+				expect(resPost.content).to.equal(post.content);
+				expect(resPost.author).to.equal(post.author);
+			});
 		});
 	});
 })
