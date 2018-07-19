@@ -206,5 +206,28 @@ describe("Posts API resource", function() {
 		});
 	});
 
-	
+	describe("DELETE endpoint", function() {
+		// get a post
+		// make a DELETE req for that post's id
+		// assert the response has right status code
+		// prove that post with that id doesn't exist in db anymore
+		it("should delete a post by id", function() {
+
+			let post;
+
+			return Post
+				.findOne()
+				.then(function(_post) {
+					post = _post;
+					return chai.request(app).delete(`/posts/${post.id}`);
+				})
+				.then(function(res) {
+					expect(res).to.have.status(204);
+					return Post.findById(post.id);
+				})
+				.then(function(_post) {
+					expect(_post).to.be.null;
+				});
+		});
+	});
 })
