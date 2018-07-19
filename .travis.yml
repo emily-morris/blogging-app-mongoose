@@ -5,7 +5,7 @@ services:
 deploy:
   provider: heroku
   api_key:
-    secure: HROQDmyouAfyfZvcOTmmhw
+    secure: Ol+tPtPFbWcxWb2CgsTdof7f80/UyGiOLdEsqRnjUE16bQv2oCGl+tV0e5KY9VLhzssaWatuPee12BDqt4Hz3DnT/hJ6KZ3xzIfvB97pWn2f7QQs6yy5zD32nQwW9AaclcU3VcCCrMe/Vm/uCObKdrqwUKzyVTV8qeXuatk0qHhYboEwqd3bXd2UbQ+DZLd2xtxSTdXsRUTtqcr/c+HYVt0MtlfXGg1SLnmqQB4pBfPIhvS0Xivktt71hOpExc/FDS9GRCs51OdtuitXPajsFBqlBN4hrBXvgZzLi87RwUsLoQD/R3Hvqh8YpnHUQ7kakquGmminTjXG7mKf/YEAYHDOLVWIA6Mt3OMspdKSOwuB2T1HkSuRcweHGit50CRUxHU3EO9bJsrSqNRFii8zd0XZDfOf3V5mFIw2Ds/7ZCOcrGTOvkQRNYj/E2N69qulS6bW9Qw47Ly8qp2Nm6/W5tE6DmUGGtyN2sFSMsNPqXdqQXvaqmiWX3zv89D/x+73PWnMcwRfpMmkqF6oe48MvvNKBa6k+KWnENVb7g8RbTac1qaDcKxcj6Xqy0IOo4MVI8/i/M8d4gqvlLf1sY4d7iKCe6H3969zwboCpGP651D2cER+JYiuSi8ZNGN2ol8J6JqcJV/YVOBjpA7brf9fCMGbvoetAvMEdKS5G1eZI/A=
   app: hidden-atoll-67905
   on:
     repo: emily-morris/blogging-app-mongoose
