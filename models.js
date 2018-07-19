@@ -13,6 +13,7 @@ const postSchema = mongoose.Schema({
 	// created: { type: Number, required: true }
 });
 
+
 // postSchema.pre("find", function(next) {
 // 	this.populate("author", "created");
 // 	next();
