@@ -30,19 +30,19 @@ function seedPostData() {
 
 // generate data to put in db
 function generatePostTitle() {
-	const titles = ["10 things -- you won't believe #4", "11 things -- you won't believe #4", "12 things -- you won't believe #4", "13 things -- you won't believe #4"];
-	return titles[Math.floor(Math.random() * titles.length)];
+	const title = faker.lorem.sentence();
+	return title;
 }
 
 // generate data to put in db
 function generatePostContent() {
-	const content = ["Some stuff", "Some more stuff", "Even more stuff"];
-	return content[Math.floor(Math.random() * content.length)];
+	const content = faker.lorem.text();
+	return content;
 }
 
 // generate data to put in db
 function generatePostAuthor() {
-	const author = { firstName: "John", lastName: "Smith" };
+	const author = { firstName: faker.name.firstName(), lastName: faker.name.lastName() };
 	return author;
 }
 
@@ -133,6 +133,39 @@ describe("Posts API resource", function() {
 				expect(resPost.title).to.equal(post.title);
 				expect(resPost.content).to.equal(post.content);
 				expect(resPost.author).to.equal(post.author);
+			});
+		});
+	});
+
+	describe("POST endpoint", function() {
+		// make a POST req with data
+		// prove that post we get back has right keys
+		// and that `id` is there (means data was inserted
+		// into db
+		it("should add a new post", function() {
+
+			const newPost = generatePostData();
+			console.info(newPost);
+			return chai.request(app)
+			.post("/posts")
+			.send(newPost)
+			.then(function(res) {
+				expect(res).to.have.status(201);
+				expect(res).to.be.json;
+				expect(res.body).to.be.a("object");
+				expect(res.body).to.include.keys("title", "content", "author" );
+				expect(res.body.title).to.equal(newPost.title);
+				// Mongo should have created id on insertion
+				expect(res.body.id).to.not.be.null;
+				expect(res.body.content).to.equal(newPost.content);
+				expect(res.body.author).to.equal(`${newPost.author.firstName} ${newPost.author.lastName}`);
+				return Post.findById(res.body.id);
+			})
+			.then(function(post) {
+				expect(post.title).to.equal(newPost.title);
+				expect(post.content).to.equal(newPost.content);
+				expect(post.author.firstName).to.equal(newPost.author.firstName);
+				expect(post.author.lastName).to.equal(newPost.author.lastName);
 			});
 		});
 	});
