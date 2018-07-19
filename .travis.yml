@@ -2,3 +2,10 @@ language: node_js
 node_js: node
 services:
 - mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: jtl9sctjsANLmNugEf3h4Ax1ZQ2TehGzgKQq2z2/xPpG3vjWLKekaFLRdAOFkkXGXELsUcosCexaFTFxbUuU/rEa2H0FD3yuzSZ2Kn/GTNBwdsyyKUx9kVO4G7k6z8IWhlGDJONRbRSBk3orErzY1gLjZaKUxInx/U//0+M4tASdzP2Xox/mgvJPnyrm7pZkFZY6PoW0ioXaaVRF6Ygcjupu481Rc+nHaju8btIVVG3fMk2Y3rmMUa0JG8dGwxLKdjmLCweo8ITIc3nYiij6A2pY9RERQvVjS21mrv/agd9csMv0gLPobjBmmDx+I7fJsykiwcLi3uKb7+O3BPAAyRD/kRRRebwDeZzaKH+aWxFjGIiaXz27iUjKTCnLMVdqPRwHDFPdrKzkPaJ64UUEfue9DvY04tBb9O/4k0I3Q7xci/WM85gWXPOMeQ1OR2oaoqxkn+s31CPLRsuYwqfxhIBBhdUpLBpM+JgBMour93lJJB4KoiJ0sd1eoP/mPvnBHMG2KdWPwApf2dFtTXRsz5D8kgJgmiS7iUYhd+u0693joiZ3mYTGrcoXLxku5Gr/UMNYW5cg7TviaPq+4dxd8jgjuo3Hd9GRQC0x4XkzPaCiF6e9GY6XZTZponC4W+9g7wXZUJh/j8ePEVcKxtqdnUA5cFb+xuOj8Fm6pivaCQI=
+  app: blogging-app-mongoose
+  on:
+    repo: emily-morris/blogging-app-mongoose
