@@ -169,4 +169,42 @@ describe("Posts API resource", function() {
 			});
 		});
 	});
+
+	describe("PUT endpoint", function() {
+		// get existing post from db
+		// make a PUT req to update post
+		// prove post returned by req contains data we sent
+		// prove post in db is correctly updated
+		it("should update fields you send over", function() {
+			const updateData = {
+				title: "great title",
+				content: "great words",
+				author: "Great Author"
+			};
+
+			return Post
+				.findOne()
+				.then(function(post) {
+					updateData.id = post.id;
+
+					// make req then inspect it to make sure it reflects data we sent
+					return chai.request(app)
+						.put(`/posts/${post.id}`)
+						.send(updateData);
+				})
+				.then(function(res) {
+					expect(res).to.have.status(204);
+
+					return Post.findById(updateData.id);
+				})
+				.then(function(post) {
+					expect(post.title).to.equal(updateData.title);
+					expect(post.content).to.equal(updateData.content);
+					expect(post.author.firstName).to.equal(updateData.author.firstName);
+					expect(post.author.lastName).to.equal(updateData.author.lastName);
+				});
+		});
+	});
+
+	
 })
