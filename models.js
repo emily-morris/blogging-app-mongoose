@@ -1,6 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
 
 //schema to represent posts
 const postSchema = mongoose.Schema({
@@ -13,10 +14,15 @@ const postSchema = mongoose.Schema({
 	// created: { type: Number, required: true }
 });
 
-// postSchema.pre("find", function(next) {
-// 	this.populate("author", "created");
-// 	next();
-// });
+postSchema.pre("find", function(next) {
+	this.populate("author");
+	next();
+});
+
+postSchema.pre("findOne", function(next) {
+	this.populate("author");
+	next();
+});
 
 postSchema.virtual("authorName").get(function() {
 	return `${this.author.firstName} ${this.author.lastName}`;
