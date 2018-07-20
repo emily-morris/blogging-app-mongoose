@@ -14,16 +14,6 @@ const postSchema = mongoose.Schema({
 	// created: { type: Number, required: true }
 });
 
-postSchema.pre("find", function(next) {
-	this.populate("author");
-	next();
-});
-
-postSchema.pre("findOne", function(next) {
-	this.populate("author");
-	next();
-});
-
 postSchema.virtual("authorName").get(function() {
 	return `${this.author.firstName} ${this.author.lastName}`;
 });
