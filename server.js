@@ -15,11 +15,10 @@ app.use(morgan("common"));
 app.use(express.json());
 
 app.get("/posts", (req, res) => {
-	Post.find()
+	Post
+  .find()
 	.then(posts => {
-		res.json({
-			posts: posts.map(post => post.serialize())
-		});
+		res.json(posts.map(post => post.serialize()));
 	})
 	.catch(err => {
 		console.error(err);
@@ -50,11 +49,12 @@ app.post("/posts", (req, res) => {
     }
   }
 
-  Post.create({
-    title: req.body.title,
-    content: req.body.content,
-    author: req.body.author
-  })
+  Post
+    .create({
+      title: req.body.title,
+      content: req.body.content,
+      author: req.body.author
+    })
     .then(post => res.status(201).json(post.serialize()))
     .catch(err => {
       console.error(err);
@@ -88,7 +88,8 @@ app.put("/posts/:id", (req, res) => {
 });
 
 app.delete("/posts/:id", (req, res) => {
-  Post.findByIdAndRemove(req.params.id)
+  Post
+    .findByIdAndRemove(req.params.id)
     .then(post => res.status(204).end())
     .catch(err => res.status(500).json({ message: "Internal server error" }));
 });
