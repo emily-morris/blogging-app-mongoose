@@ -8,6 +8,7 @@ mongoose.Promise = global.Promise;
 
 const { PORT, DATABASE_URL } = require("./config");
 const { Post } = require("./models");
+const { Author } = require("./models");
 
 const app = express();
 
@@ -15,15 +16,16 @@ app.use(morgan("common"));
 app.use(express.json());
 
 app.get("/posts", (req, res) => {
-	Post
-  .find()
-	.then(posts => {
-		res.json(posts.map(post => post.serialize()));
-	})
-	.catch(err => {
-		console.error(err);
-		res.status(500).json({ message: "Internal server error" });
-	});
+  Post.find()
+  .then(posts => {
+    res.json({
+      posts: posts.map(post => post.serialize())
+    });
+  })
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  });
 });
 
 //request by ID
@@ -49,13 +51,36 @@ app.post("/posts", (req, res) => {
     }
   }
 
-  Post
-    .create({
-      title: req.body.title,
-      content: req.body.content,
-      author: req.body.author
-    })
+  Post.create({
+    title: req.body.title,
+    content: req.body.content,
+    author: req.body.author
+  })
     .then(post => res.status(201).json(post.serialize()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    });
+});
+
+// create an author
+app.post("/authors", (req, res) => {
+  const requiredFields = ["firstName", "lastName", "userName"];
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if(!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  Author.create({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    userName: req.body.userName
+  })
+    .then(author => res.status(201).json(author.serialize()))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: "Internal server error" });
@@ -88,8 +113,7 @@ app.put("/posts/:id", (req, res) => {
 });
 
 app.delete("/posts/:id", (req, res) => {
-  Post
-    .findByIdAndRemove(req.params.id)
+  Post.findByIdAndRemove(req.params.id)
     .then(post => res.status(204).end())
     .catch(err => res.status(500).json({ message: "Internal server error" }));
 });

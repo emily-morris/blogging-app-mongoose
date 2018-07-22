@@ -3,15 +3,21 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-//schema to represent posts
+// schema to represent posts
 const postSchema = mongoose.Schema({
 	title: { type: String, required: true },
 	content: { type: String, required: true },
-	author: { 
-		firstName: { type:  String, required: true },
-		lastName: { type:  String, required: true }
-	},
-	created: { type: Date, default: Date.now }
+	author: { type: mongoose.Schema.Types.ObjectId, ref: "Author" }
+});
+
+// schema to represent authors
+const authorSchema = mongoose.Schema({
+	firstName: "string",
+	lastName: "string",
+	userName: {
+		type: "string",
+		unique: true
+	}
 });
 
 postSchema.pre("findOne", function(next) {
@@ -19,30 +25,38 @@ postSchema.pre("findOne", function(next) {
 	next();
 });
 
-postSchema.virtual("authorName").get(function() {
-	return `${this.author.firstName} ${this.author.lastName}`.trim
-	();
+postSchema.pre("find", function(next) {
+	this.populate("author");
+	next();
 });
 
-//returns an obj that only exposes some of the fields
+postSchema.virtual("authorName").get(function() {
+	return `${this.author.firstName} ${this.author.lastName}`.trim();
+});
+
+authorSchema.virtual("author").get(function() {
+	return `${this.firstName} ${this.lastName}`.trim();
+});
+
+// returns an obj that only exposes some of the fields
 postSchema.methods.serialize = function() {
 	return {
 		id: this._id,
 		title: this.title,
 		content: this.content,
-		author: this.authorName,
-		created: this.created
+		author: this.authorName
 	};
 };
 
-const Post = mongoose.model("Post", postSchema);
+authorSchema.methods.serialize = function() {
+	return {
+		id: this._id,
+		name: this.author,
+		userName: this.userName
+	}
+};
 
-Post
-	.findOne({
-		title: "20 things -- you won't believe #4"
-	})
-	.then(post => {
-		console.log(post.serialize());
-	});
+const Author = mongoose.model("Author", authorSchema);
+const Post = mongoose.model("Blogpost", postSchema);
 
-module.exports = { Post };
+module.exports = { Author, Post };
