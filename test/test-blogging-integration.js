@@ -42,7 +42,7 @@ function generatePostContent() {
 
 // generate data to put in db
 function generatePostAuthor() {
-	const author = `${faker.name.firstName()} ${faker.name.lastName()}`;
+	const author = { firstName: faker.name.firstName(), lastName: faker.name.lastName() };
 	return author;
 }
 
