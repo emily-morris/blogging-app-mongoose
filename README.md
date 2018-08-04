@@ -1,3 +1,3 @@
 # blogging-app-mongoose
 
-Thinkful challenge - add Mongoose to a blogging app
+add Mongoose to a blogging app
